@@ -19,7 +19,7 @@ CREATE TABLE `empleado` (
 CREATE TABLE `medico` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `tipoMedico_fk` INT UNSIGNED NOT NULL,  
-    `status` ENUM('activo', 'inactivo') NOT NULL,
+    `status` ENUM('activo', 'inactivo', 'sustitucion') NOT NULL,
     `nombre` VARCHAR(255) NOT NULL,
     FOREIGN KEY (`tipoMedico_fk`) REFERENCES `tipoMedico`(`id`)
 );
@@ -56,7 +56,7 @@ CREATE TABLE `cita` (
     `fechaInicio` DATETIME NOT NULL,
     `fechaFin` DATETIME NOT NULL,
     `status` ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL,
-    PRIMARY KEY (`paciente_fk`, `fechaInicio`),
+    PRIMARY KEY (`paciente_fk`, `medico_fk`),
     FOREIGN KEY (`paciente_fk`) REFERENCES `paciente`(`id`),
     FOREIGN KEY (`medico_fk`) REFERENCES `medico`(`id`)
 );
