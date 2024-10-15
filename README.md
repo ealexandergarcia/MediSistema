@@ -150,6 +150,16 @@ LIMIT 1;
 
 ```sql
 
+SELECT 
+    m.id AS medicoId,
+    m.nombre AS nombreMedico,
+    tm.tipo AS tipoMedico
+FROM 
+    medico m
+JOIN 
+    tipoMedico tm ON m.tipoMedico_fk = tm.id
+WHERE 
+    m.status = 'sustitucion';
 
 
 ```
@@ -162,6 +172,18 @@ LIMIT 1;
 
 ```sql
 
+SELECT 
+    m.nombre AS medico,
+    DAYOFWEEK(h.fechaInicio) AS dia_semana,
+    AVG(TIMESTAMPDIFF(HOUR, h.fechaInicio, h.fechaFin)) AS promedio_horas_consulta
+FROM 
+    horario h
+JOIN 
+    medico m ON h.medico_fk = m.id
+GROUP BY 
+    m.id, dia_semana
+ORDER BY 
+    m.nombre, dia_semana;
 
 
 ```
@@ -234,6 +256,18 @@ GROUP BY
 
 ```sql
 
+SELECT 
+    m.nombre AS medico,
+    DAYOFWEEK(h.fechaInicio) AS dia_semana,
+    SUM(TIMESTAMPDIFF(HOUR, h.fechaInicio, h.fechaFin)) AS horas_consulta
+FROM 
+    horario h
+JOIN 
+    medico m ON h.medico_fk = m.id
+GROUP BY 
+    m.id, dia_semana
+ORDER BY 
+    m.nombre, dia_semana;
 
 
 ```
@@ -245,6 +279,17 @@ GROUP BY
 
 
 ```sql
+SELECT 
+    tm.tipo AS tipoMedico,
+    COUNT(m.id) AS numeroSustituciones
+FROM 
+    medico m
+JOIN 
+    tipoMedico tm ON m.tipoMedico_fk = tm.id
+WHERE 
+    m.status = 'sustitucion'
+GROUP BY 
+    tm.tipo;
 
 
 
@@ -294,6 +339,19 @@ GROUP BY
 
 ```sql
 
+SELECT 
+    m.nombre AS nombreMedico,
+    COUNT(c.paciente_fk) AS numeroPacientes
+FROM 
+    medico m
+LEFT JOIN 
+    cita c ON m.id = c.medico_fk AND c.status = 'confirmada'
+WHERE 
+    m.status = 'sustitucion'
+GROUP BY 
+    m.id, m.nombre
+ORDER BY 
+    numeroPacientes DESC;
 
 
 ```
@@ -306,6 +364,20 @@ GROUP BY
 
 ```sql
 
+SELECT 
+    tm.tipo AS especialidad,
+    DAYOFWEEK(h.fechaInicio) AS dia_semana,
+    SUM(TIMESTAMPDIFF(HOUR, h.fechaInicio, h.fechaFin)) AS horas_consulta
+FROM 
+    horario h
+JOIN 
+    medico m ON h.medico_fk = m.id
+JOIN 
+    tipoMedico tm ON m.tipoMedico_fk = tm.id
+GROUP BY 
+    tm.id, dia_semana
+ORDER BY 
+    tm.tipo, dia_semana;
 
 
 ```
