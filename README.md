@@ -29,7 +29,14 @@ GROUP BY
 
 ```sql
 
-
+SELECT 
+	m.nombre,
+	datediff(c.fechaFin,c.fechaInicio) as TotalDías,
+    c.status as estadoVaciones
+FROM MediSistema.vacaciones c 
+JOIN
+	medico m ON c.medico_fk = m.id
+where c.status = "aprobada";
 
 ```
 
@@ -64,7 +71,12 @@ GROUP BY
 
 
 ```sql
-
+SELECT 
+	status,
+    count(status) as medicos
+FROM MediSistema.medico
+GROUP BY 
+    status;
 
 
 ```
@@ -76,6 +88,18 @@ GROUP BY
 
 
 ```sql
+SELECT 
+    m.nombre AS medico,
+    DATE(h.fechaInicio) AS fecha,
+    SUM(TIMESTAMPDIFF(HOUR, h.fechaInicio, h.fechaFin)) AS horas_consulta
+FROM 
+    medico m
+JOIN 
+    horario h ON m.id = h.medico_fk
+GROUP BY 
+    m.id, DATE(h.fechaInicio)
+ORDER BY 
+    m.nombre, fecha;
 
 
 
