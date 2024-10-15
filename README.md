@@ -8,6 +8,15 @@
 
 ```sql
 
+SELECT 
+    m.nombre AS medico_nombre,
+    COUNT(c.paciente_fk) AS numero_pacientes_atendidos
+FROM 
+    medico m
+LEFT JOIN 
+    cita c ON m.id = c.medico_fk
+GROUP BY 
+    m.id, m.nombre;
 
 
 ```
@@ -80,6 +89,19 @@
 
 ```sql
 
+SELECT 
+    m.id AS medico_id,
+    m.nombre AS medico_nombre,
+    COUNT(c.paciente_fk) AS total_pacientes
+FROM 
+    medico m
+LEFT JOIN 
+    cita c ON m.id = c.medico_fk
+GROUP BY 
+    m.id, m.nombre
+ORDER BY 
+    total_pacientes DESC
+LIMIT 1;
 
 
 ```
@@ -163,6 +185,18 @@
 
 
 ```sql
+SELECT 
+    tm.tipo AS tipoMedico,
+    COUNT(c.paciente_fk) AS totalPacientes
+FROM 
+    cita c
+JOIN 
+    medico m ON c.medico_fk = m.id
+JOIN 
+    tipoMedico tm ON m.tipoMedico_fk = tm.id
+GROUP BY 
+    tm.tipo;
+
 
 
 
@@ -199,6 +233,18 @@
 
 
 ```sql
+SELECT 
+    m.nombre AS medico,
+    tm.tipo AS especialidad,
+    COUNT(c.paciente_fk) AS totalPacientes
+FROM 
+    cita c
+JOIN 
+    medico m ON c.medico_fk = m.id
+JOIN 
+    tipoMedico tm ON m.tipoMedico_fk = tm.id
+GROUP BY 
+    m.id, tm.tipo;
 
 
 
